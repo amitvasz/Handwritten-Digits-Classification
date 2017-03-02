@@ -1,7 +1,9 @@
 import numpy as np
+from scipy.special import expit
 from scipy.optimize import minimize
 from scipy.io import loadmat
 from math import sqrt
+import math
 
 
 def initializeWeights(n_in, n_out):
@@ -24,8 +26,8 @@ def initializeWeights(n_in, n_out):
 def sigmoid(z):
     """# Notice that z can be a scalar, a vector or a matrix
     # return the sigmoid of input z"""
-
-    return  # your code here
+    
+    return expit(z) # your code here
 
 
 def preprocess():
@@ -126,17 +128,13 @@ def preprocess():
 
     # Feature selection
     # Your code here.
-    count = 0
     columnsToDelete = []
     for i in range(784):
         if np.std(train_data[:,i]) == 0:
             columnsToDelete.insert(len(columnsToDelete),i)
-            print(test_data[:,i])
-            print(count)
     
     for i in range(len(columnsToDelete)) :
         train_data = np.delete(train_data,columnsToDelete[i]-i,1)
-        print(np.shape(train_data))
 
     print('preprocess done')
 
@@ -181,12 +179,25 @@ def nnObjFunction(params, *args):
     %     w2(i, j) represents the weight of connection from unit j in hidden 
     %     layer to unit i in output layer."""
 
-    n_input, n_hidden, n_class, training_data, training_label, lambdaval = args
+    n_input, n_hidden, n_class, training_data, training_label, lambdaval, finalOutput = args
 
     w1 = params[0:n_hidden * (n_input + 1)].reshape((n_hidden, (n_input + 1)))
     w2 = params[(n_hidden * (n_input + 1)):].reshape((n_class, (n_hidden + 1)))
     obj_val = 0
-
+    print(max(training_label))
+    for i in range(50000):
+        intermediateSum = 0
+        for j in range(10):
+            if j == training_label[i]:
+                intermediateSum = intermediateSum + np.dot(training_label[i],np.log(finalOutput[i][j]))
+            else:
+                diff = np.log(1-finalOutput[i][j])
+                intermediateSum = intermediateSum + diff
+                
+        
+        obj_val = (obj_val + intermediateSum)*-1/n_input
+    
+    print("Objective Value is : ",obj_val)    
     # Your code here
     #
     #
@@ -235,7 +246,8 @@ train_data, train_label, validation_data, validation_label, test_data, test_labe
 
 # set the number of nodes in input unit (not including bias unit)
 n_input = train_data.shape[1]
-
+bias = np.ones(50000)
+train_data = np.insert(train_data,0,bias,axis=1)
 # set the number of nodes in hidden unit (not including bias unit)
 n_hidden = 50
 
@@ -246,13 +258,21 @@ n_class = 10
 initial_w1 = initializeWeights(n_input, n_hidden)
 initial_w2 = initializeWeights(n_hidden, n_class)
 
+sig = np.dot(initial_w1,np.transpose(train_data))
+outputOfHiddenLayer = sigmoid(sig)
+
+
+outputOfHiddenLayer = np.insert(outputOfHiddenLayer,0,bias,axis=0)
+sig = np.dot(initial_w2,outputOfHiddenLayer)
+finalOutput = np.transpose(sigmoid(sig))
+print(np.shape(finalOutput))
 # unroll 2 weight matrices into single column vector
 initialWeights = np.concatenate((initial_w1.flatten(), initial_w2.flatten()), 0)
 
 # set the regularization hyper-parameter
 lambdaval = 0
 
-args = (n_input, n_hidden, n_class, train_data, train_label, lambdaval)
+args = (n_input, n_hidden, n_class, train_data, train_label, lambdaval, finalOutput)
 
 # Train Neural Network using fmin_cg or minimize from scipy,optimize module. Check documentation for a working example
 
