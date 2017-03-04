@@ -179,38 +179,87 @@ def nnObjFunction(params, *args):
     %     w2(i, j) represents the weight of connection from unit j in hidden 
     %     layer to unit i in output layer."""
 
-    n_input, n_hidden, n_class, training_data, training_label, lambdaval, finalOutput = args
+    n_input, n_hidden, n_class, training_data, training_label, lambdaval = args
 
     w1 = params[0:n_hidden * (n_input + 1)].reshape((n_hidden, (n_input + 1)))
     w2 = params[(n_hidden * (n_input + 1)):].reshape((n_class, (n_hidden + 1)))
-    obj_val = 0
-    print(max(training_label))
+    obj_val = 0.0
+    
+    bias = np.ones(50000)
+    training_data = np.insert(training_data,0,bias,axis=1)
+    sig = np.dot(w1,np.transpose(training_data))
+    outputOfHiddenLayer = sigmoid(sig)
+    outputOfHiddenLayer = np.insert(outputOfHiddenLayer,0,bias,axis=0)
+    #print("Output of Hidden Layer\n")
+    #print(outputOfHiddenLayer)
+    
+    sig_for_final_output = np.dot(w2,outputOfHiddenLayer)
+    finalOutput = np.transpose(sigmoid(sig_for_final_output))
+    #print("Output of Final Layer\n")
+    #print(finalOutput)
+    training_label_matrix = np.ndarray(shape=(50000,10))
+    
+    for i in range(len(training_label)):
+        for j in range(n_class):
+            if(j == n_class):
+                training_label_matrix[i][j] = 1
+            
+            else:
+                training_label_matrix[i][j] = 0    
+    
+    
     for i in range(50000):
-        intermediateSum = 0
+        intermediateSum = 0.0
         for j in range(10):
             if j == training_label[i]:
-                intermediateSum = intermediateSum + np.dot(training_label[i],np.log(finalOutput[i][j]))
-            else:
-                diff = np.log(1-finalOutput[i][j])
-                intermediateSum = intermediateSum + diff
+                if finalOutput[i][j] != 0 :
+                    intermediateSum = intermediateSum + np.log(finalOutput[i][j])
                 
-        
-        obj_val = (obj_val + intermediateSum)*-1/n_input
+            else:
+                if finalOutput[i][j] != 1 :
+                    diff = np.log(1-finalOutput[i][j])
+                    intermediateSum = intermediateSum + diff
+
+        obj_val = (obj_val + intermediateSum)
+   
+    obj_val = (obj_val * -1)/n_input
     
-    print("Objective Value is : ",obj_val)    
-    # Your code here
-    #
-    #
-    #
-    #
-    #
-
-
-
+    print("Objective Value is : ",obj_val)   
+    #print(np.shape(training_label_matrix))
+    gradiance = np.subtract(finalOutput, training_label_matrix)
+    #print("Shape of O-L",np.shape(gradiance))
+    grad_w2 = np.dot(np.transpose(gradiance),np.transpose(outputOfHiddenLayer))
+    #print(np.shape(grad_w2))            
+    
+    #Calculating Obj Function
+    array_of_ones = np.ndarray(shape=(51,50000))    
+    
+    for i in range(51):
+        for j in range(50000):
+            array_of_ones[i][j] = 1
+            
+    subtraction = np.subtract(array_of_ones,outputOfHiddenLayer)
+    #print("Subtraction Shape",np.shape(subtraction))
+    sub_prod_zJ = subtraction*outputOfHiddenLayer
+    #print("sub_prod_zJ",np.shape(sub_prod_zJ))
+    output_of_summation = np.dot(gradiance,w2)
+    #print("output of summation Shape",np.shape(output_of_summation))
+    prod_summation = sub_prod_zJ*np.transpose(output_of_summation)
+    prod_summation = np.delete(prod_summation,0,axis=0)
+    #print("prod_summation Shape",np.shape(prod_summation))
+    grad_w1 = np.dot(prod_summation,training_data)
+    
     # Make sure you reshape the gradient matrices to a 1D array. for instance if your gradient matrices are grad_w1 and grad_w2
     # you would use code similar to the one below to create a flat array
-    # obj_grad = np.concatenate((grad_w1.flatten(), grad_w2.flatten()),0)
-    obj_grad = np.array([])
+    obj_grad = np.concatenate((grad_w1.flatten(), grad_w2.flatten()),0)
+    
+    regularization_of_w1 = np.sum(np.square(w1))
+    regularization_of_w2 = np.sum(np.square(w2))
+    regularization = (lambdaval*(regularization_of_w1+regularization_of_w2))/(2*n_input)
+    obj_grad = obj_grad + regularization
+    print(regularization_of_w1)
+    print(regularization_of_w2)
+    
 
     return (obj_val, obj_grad)
 
@@ -231,8 +280,26 @@ def nnPredict(w1, w2, data):
        
     % Output: 
     % label: a column vector of predicted labels"""
+    
+    bias = np.ones(50000)
+    data = np.insert(data,0,bias,axis=1)
+    sig = np.dot(w1,np.transpose(data))
+    outputOfHiddenLayer = sigmoid(sig)
+    outputOfHiddenLayer = np.insert(outputOfHiddenLayer,0,bias,axis=0)
+    #print("Output of Hidden Layer\n")
+    #print(outputOfHiddenLayer)
+    
+    sig = np.dot(w2,outputOfHiddenLayer)
+    finalOutput = np.transpose(sigmoid(sig))
+    #print("Output of Final Layer\n")
+    #print(np.shape(finalOutput))
 
     labels = np.array([])
+    for i in range(len(finalOutput)):
+        maxValue = max(finalOutput[i,:])
+        for j in range(finalOutput.shape[1]):
+            if maxValue == finalOutput[i][j]:
+                labels = np.append(labels,j)
     # Your code here
 
     return labels
@@ -244,10 +311,9 @@ train_data, train_label, validation_data, validation_label, test_data, test_labe
 
 #  Train Neural Network
 
+
 # set the number of nodes in input unit (not including bias unit)
 n_input = train_data.shape[1]
-bias = np.ones(50000)
-train_data = np.insert(train_data,0,bias,axis=1)
 # set the number of nodes in hidden unit (not including bias unit)
 n_hidden = 50
 
@@ -258,21 +324,14 @@ n_class = 10
 initial_w1 = initializeWeights(n_input, n_hidden)
 initial_w2 = initializeWeights(n_hidden, n_class)
 
-sig = np.dot(initial_w1,np.transpose(train_data))
-outputOfHiddenLayer = sigmoid(sig)
-
-
-outputOfHiddenLayer = np.insert(outputOfHiddenLayer,0,bias,axis=0)
-sig = np.dot(initial_w2,outputOfHiddenLayer)
-finalOutput = np.transpose(sigmoid(sig))
-print(np.shape(finalOutput))
 # unroll 2 weight matrices into single column vector
 initialWeights = np.concatenate((initial_w1.flatten(), initial_w2.flatten()), 0)
 
 # set the regularization hyper-parameter
-lambdaval = 0
+lambdaval = 12
 
-args = (n_input, n_hidden, n_class, train_data, train_label, lambdaval, finalOutput)
+
+args = (n_input, n_hidden, n_class, train_data, train_label, lambdaval)
 
 # Train Neural Network using fmin_cg or minimize from scipy,optimize module. Check documentation for a working example
 
