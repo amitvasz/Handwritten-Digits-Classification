@@ -183,8 +183,8 @@ def nnObjFunction(params, *args):
 
     w1 = params[0:n_hidden * (n_input + 1)].reshape((n_hidden, (n_input + 1)))
     w2 = params[(n_hidden * (n_input + 1)):].reshape((n_class, (n_hidden + 1)))
-    obj_val = 0.0
-    
+    obj_val = np.array([])
+    obj_sum = 0.0
     bias = np.ones(50000)
     training_data = np.insert(training_data,0,bias,axis=1)
     sig = np.dot(w1,np.transpose(training_data))
@@ -219,9 +219,9 @@ def nnObjFunction(params, *args):
                     diff = np.log(1-finalOutput[i][j])
                     intermediateSum = intermediateSum + diff
 
-        obj_val = (obj_val + intermediateSum)
+        obj_sum = (obj_sum + intermediateSum)
    
-    obj_val = (obj_val * -1)/50000
+    obj_val = np.append(obj_val,(obj_sum * -1)/50000)
     
     print("Objective Value is : ",obj_val)   
     #print(np.shape(training_label_matrix))
@@ -247,19 +247,25 @@ def nnObjFunction(params, *args):
     prod_summation = np.delete(prod_summation,0,axis=0)
     #print("prod_summation Shape",np.shape(prod_summation))
     grad_w1 = np.dot(prod_summation,training_data)
+    #print("Shape of Grad W1",np.shape(grad_w1))
     
     # Make sure you reshape the gradient matrices to a 1D array. for instance if your gradient matrices are grad_w1 and grad_w2
     # you would use code similar to the one below to create a flat array
-    obj_grad = np.concatenate((grad_w1.flatten(), grad_w2.flatten()),0)
     
     regularization_of_w1 = np.sum(np.square(w1))
     regularization_of_w2 = np.sum(np.square(w2))
-    regularization = (lambdaval*(regularization_of_w1+regularization_of_w2))/(2*50000)
-    obj_grad = obj_grad + regularization
+    regularization = (lambdaval*(regularization_of_w1+regularization_of_w2))/(2*n_input)
+    obj_val = obj_val + regularization
     print(regularization_of_w1)
-    print(regularization_of_w2)
+    print(regularization_of_w2)    
     
-
+    delJDividedDwj2 = (grad_w2 + lambdaval*w2)/(n_hidden+1)
+    delJDividedDwj1 = (grad_w1 + lambdaval*w1)/n_input
+    
+    
+    obj_grad = np.array([])
+    obj_grad = np.concatenate((delJDividedDwj1.flatten(), delJDividedDwj2.flatten()),0)
+    
     return (obj_val, obj_grad)
 
 
@@ -299,6 +305,7 @@ def nnPredict(w1, w2, data):
         for j in range(finalOutput.shape[1]):
             if maxValue == finalOutput[i][j]:
                 labels = np.append(labels,j)
+                break
     # Your code here
 
     return labels
@@ -327,7 +334,7 @@ initial_w2 = initializeWeights(n_hidden, n_class)
 initialWeights = np.concatenate((initial_w1.flatten(), initial_w2.flatten()), 0)
 
 # set the regularization hyper-parameter
-lambdaval = 12
+lambdaval = 20
 
 
 args = (n_input, n_hidden, n_class, train_data, train_label, lambdaval)
