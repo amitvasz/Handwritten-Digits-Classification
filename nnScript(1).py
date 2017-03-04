@@ -212,7 +212,6 @@ def nnObjFunction(params, *args):
         intermediateSum = 0.0
         for j in range(10):
             if j == training_label[i]:
-                if finalOutput[i][j] != 0 :
                     intermediateSum = intermediateSum + np.log(finalOutput[i][j])
                 
             else:
@@ -222,7 +221,7 @@ def nnObjFunction(params, *args):
 
         obj_val = (obj_val + intermediateSum)
    
-    obj_val = (obj_val * -1)/n_input
+    obj_val = (obj_val * -1)/50000
     
     print("Objective Value is : ",obj_val)   
     #print(np.shape(training_label_matrix))
@@ -255,7 +254,7 @@ def nnObjFunction(params, *args):
     
     regularization_of_w1 = np.sum(np.square(w1))
     regularization_of_w2 = np.sum(np.square(w2))
-    regularization = (lambdaval*(regularization_of_w1+regularization_of_w2))/(2*n_input)
+    regularization = (lambdaval*(regularization_of_w1+regularization_of_w2))/(2*50000)
     obj_grad = obj_grad + regularization
     print(regularization_of_w1)
     print(regularization_of_w2)
