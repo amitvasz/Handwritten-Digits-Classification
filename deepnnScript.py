@@ -14,6 +14,11 @@ def create_multilayer_perceptron():
     # Network Parameters
     n_hidden_1 = 256  # 1st layer number of features
     n_hidden_2 = 256  # 2nd layer number of features
+    n_hidden_3 = 256
+    n_hidden_4 = 256
+    n_hidden_5 = 256
+    #n_hidden_4 = 256
+    #n_hidden_5 = 256
     n_input = 2376  # data input
     n_classes = 2
 
@@ -21,11 +26,17 @@ def create_multilayer_perceptron():
     weights = {
         'h1': tf.Variable(tf.random_normal([n_input, n_hidden_1])),
         'h2': tf.Variable(tf.random_normal([n_hidden_1, n_hidden_2])),
-        'out': tf.Variable(tf.random_normal([n_hidden_2, n_classes]))
+        'h3': tf.Variable(tf.random_normal([n_hidden_2, n_hidden_3])),
+        'h4': tf.Variable(tf.random_normal([n_hidden_3, n_hidden_4])),
+        'h5': tf.Variable(tf.random_normal([n_hidden_4, n_hidden_5])),
+        'out': tf.Variable(tf.random_normal([n_hidden_5, n_classes]))
     }
     biases = {
         'b1': tf.Variable(tf.random_normal([n_hidden_1])),
         'b2': tf.Variable(tf.random_normal([n_hidden_2])),
+        'b3': tf.Variable(tf.random_normal([n_hidden_3])),
+        'b4': tf.Variable(tf.random_normal([n_hidden_4])),
+        'b5': tf.Variable(tf.random_normal([n_hidden_5])),
         'out': tf.Variable(tf.random_normal([n_classes]))
     }
     # tf Graph input
@@ -39,8 +50,14 @@ def create_multilayer_perceptron():
     # Hidden layer with RELU activation
     layer_2 = tf.add(tf.matmul(layer_1, weights['h2']), biases['b2'])
     layer_2 = tf.nn.relu(layer_2)
+    layer_3 = tf.add(tf.matmul(layer_2, weights['h3']), biases['b3'])
+    layer_3 = tf.nn.relu(layer_3)
+    layer_4 = tf.add(tf.matmul(layer_3, weights['h4']), biases['b4'])
+    layer_4 = tf.nn.relu(layer_4)
+    layer_5 = tf.add(tf.matmul(layer_4, weights['h5']), biases['b5'])
+    layer_5 = tf.nn.relu(layer_5)
     # Output layer with linear activation
-    out_layer = tf.matmul(layer_2, weights['out']) + biases['out']
+    out_layer = tf.matmul(layer_5, weights['out']) + biases['out']
     return out_layer,x,y
 
 # Do not change this
@@ -70,7 +87,7 @@ def preprocess():
 
 # Parameters
 learning_rate = 0.0001
-training_epochs = 50
+training_epochs = 500
 batch_size = 100
 
 # Construct model
@@ -104,3 +121,6 @@ with tf.Session() as sess:
     correct_prediction = tf.equal(tf.argmax(pred, 1), tf.argmax(y, 1))
     accuracy = tf.reduce_mean(tf.cast(correct_prediction, "float"))
     print("Accuracy:", accuracy.eval({x: test_features, y: test_labels}))
+    target = open("accuracy.txt", 'w')
+    target.write(accuracy.eval({x: test_features, y: test_labels}))
+    target.close()
