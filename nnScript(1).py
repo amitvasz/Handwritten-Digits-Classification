@@ -215,11 +215,11 @@ def nnObjFunction(params, *args):
         intermediateSum = 0.0
         for j in range(10):
             if j == training_label[i]:
-                    intermediateSum = intermediateSum + np.log(finalOutput[i][j])
+                intermediateSum = intermediateSum + np.log(finalOutput[i][j])
                 
             else:
-                    diff = np.log(1-finalOutput[i][j])
-                    intermediateSum = intermediateSum + diff
+                diff = np.log(1-finalOutput[i][j])
+                intermediateSum = intermediateSum + diff
 
         obj_sum = (obj_sum + intermediateSum)
    
@@ -333,7 +333,7 @@ print(np.shape(initial_w1))
 initialWeights = np.concatenate((initial_w1.flatten(), initial_w2.flatten()), 0)
 
 # set the regularization hyper-parameter
-lambdaval = 20
+lambdaval = 75
 
 
 args = (n_input, n_hidden, n_class, train_data, train_label, lambdaval)

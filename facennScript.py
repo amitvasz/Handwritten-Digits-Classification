@@ -3,6 +3,11 @@ Comparing single layer MLP with deep MLP (using TensorFlow)
 '''
 
 import numpy as np
+from scipy.special import expit
+from scipy.optimize import minimize
+from scipy.io import loadmat
+from math import sqrt
+import math
 import pickle
 
 # Do not change this
@@ -25,13 +30,124 @@ def initializeWeights(n_in,n_out):
 
 # Replace this with your sigmoid implementation
 def sigmoid(z):
-# Replace this with your nnObjFunction implementation
-def nnObjFunction(params, *args):
-    
-# Replace this with your nnPredict implementation
-def nnPredict(w1,w2,data):
+    return expit(z)
 
-# Do not change this
+def nnObjFunction(params, *args):
+    n_input, n_hidden, n_class, training_data, training_label_matrix, lambdaval = args
+
+    w1 = params[0:n_hidden * (n_input + 1)].reshape((n_hidden, (n_input + 1)))
+    w2 = params[(n_hidden * (n_input + 1)):].reshape((n_class, (n_hidden + 1)))
+    obj_val = np.array([])
+    obj_sum = 0.0
+    no_of_inputs = training_data.shape[0]
+    bias = np.ones(no_of_inputs)
+    training_data = np.insert(training_data,0,bias,axis=1)
+    sig = np.dot(w1,np.transpose(training_data))
+    outputOfHiddenLayer = sigmoid(sig)
+    outputOfHiddenLayer = np.insert(outputOfHiddenLayer,0,bias,axis=0)
+
+    sig_for_final_output = np.dot(w2,outputOfHiddenLayer)
+    finalOutput = np.transpose(sigmoid(sig_for_final_output))
+    
+    '''training_label_matrix = np.ndarray(shape=(no_of_inputs,n_class))
+    
+    print("Shape of training label",np.shape(training_label))
+    for i in range(len(training_label)):
+        for j in range(n_class):
+            if(j == training_label[i]):
+                training_label_matrix[i][j] = 1
+            
+            else:
+                training_label_matrix[i][j] = 0   '''
+    
+                
+    
+    
+    #obj_val = np.sum(training_label_matrix*np.log(finalOutput) + (1-training_label_matrix)*np.log(1-finalOutput))
+    
+    #obj_val = (obj_val * -1)/no_of_inputs
+    for i in range(no_of_inputs):
+        intermediateSum = 0.0
+        for j in range(n_class):
+            if j == training_label_matrix[i][j]:
+                    intermediateSum = intermediateSum + np.log(finalOutput[i][j])
+                
+            else:
+                    diff = np.log(1-finalOutput[i][j])
+                    intermediateSum = intermediateSum + diff
+
+        obj_sum = (obj_sum + intermediateSum)
+   
+    obj_val = np.append(obj_val,(obj_sum * -1)/no_of_inputs)
+    
+    print("Objective Value is : ",obj_val)   
+    #print(np.shape(training_label_matrix))
+    gradiance = np.subtract(finalOutput, training_label_matrix)
+    #print("Shape of O-L",np.shape(gradiance))
+    grad_w2 = np.dot(np.transpose(gradiance),np.transpose(outputOfHiddenLayer))
+    #print(np.shape(grad_w2))            
+    
+    #Calculating Obj Function
+            
+    subtraction = 1-outputOfHiddenLayer
+    #print("Subtraction Shape",np.shape(subtraction))
+    sub_prod_zJ = subtraction*outputOfHiddenLayer
+    #print("sub_prod_zJ",np.shape(sub_prod_zJ))
+    output_of_summation = np.dot(gradiance,w2)
+    #print("output of summation Shape",np.shape(output_of_summation))
+    prod_summation = sub_prod_zJ*np.transpose(output_of_summation)
+    prod_summation = np.delete(prod_summation,0,axis=0)
+    #print("prod_summation Shape",np.shape(prod_summation))
+    grad_w1 = np.dot(prod_summation,training_data)
+    #print("Shape of Grad W1",np.shape(grad_w1))
+    
+    # Make sure you reshape the gradient matrices to a 1D array. for instance if your gradient matrices are grad_w1 and grad_w2
+    # you would use code similar to the one below to create a flat array
+    
+    regularization_of_w1 = np.sum(np.square(w1))
+    regularization_of_w2 = np.sum(np.square(w2))
+    regularization = (lambdaval*(regularization_of_w1+regularization_of_w2))/(2*no_of_inputs)
+    obj_val = obj_val + regularization
+        
+    delJDividedDwj2 = (grad_w2 + lambdaval*w2)/(n_hidden+1)
+    delJDividedDwj1 = (grad_w1 + lambdaval*w1)/n_input
+    
+    
+    obj_grad = np.array([])
+    obj_grad = np.concatenate((delJDividedDwj1.flatten(), delJDividedDwj2.flatten()),0)
+    
+    return (obj_val, obj_grad)
+    
+def nnPredict(w1,w2,data):
+    no_of_input = data.shape[0]
+    bias = np.ones(no_of_input)
+    data = np.insert(data,0,bias,axis=1)
+    sig = np.dot(w1,np.transpose(data))
+    outputOfHiddenLayer = sigmoid(sig)
+    outputOfHiddenLayer = np.insert(outputOfHiddenLayer,0,bias,axis=0)
+    #print("Output of Hidden Layer\n")
+    #print(outputOfHiddenLayer)
+    
+    sig = np.dot(w2,outputOfHiddenLayer)
+    finalOutput = np.transpose(sigmoid(sig))
+    #print("Output of Final Layer\n")
+    #print(np.shape(finalOutput))
+
+    labels = np.ndarray(shape=(no_of_input,n_class))
+    for i in range(len(finalOutput)):
+        maxValue = max(finalOutput[i,:])
+        flag = 0
+        for j in range(finalOutput.shape[1]):
+            if maxValue == finalOutput[i][j] and flag != 1:
+                labels[i][j] = 1
+                flag = 1
+            
+            else:
+                labels[i][j] = 0
+    # Your code here
+    print(np.shape(labels))        
+    return labels    
+
 def preprocess():
     pickle_obj = pickle.load(file=open('face_all.pickle', 'rb'))
     features = pickle_obj['Features']
@@ -61,7 +177,7 @@ train_data, train_label, validation_data, validation_label, test_data, test_labe
 # set the number of nodes in input unit (not including bias unit)
 n_input = train_data.shape[1]
 # set the number of nodes in hidden unit (not including bias unit)
-n_hidden = 256
+n_hidden = 200
 # set the number of nodes in output unit
 n_class = 2
 
@@ -71,7 +187,7 @@ initial_w2 = initializeWeights(n_hidden, n_class);
 # unroll 2 weight matrices into single column vector
 initialWeights = np.concatenate((initial_w1.flatten(), initial_w2.flatten()),0)
 # set the regularization hyper-parameter
-lambdaval = 10;
+lambdaval = 60;
 args = (n_input, n_hidden, n_class, train_data, train_label, lambdaval)
 
 #Train Neural Network using fmin_cg or minimize from scipy,optimize module. Check documentation for a working example

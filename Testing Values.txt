@@ -6,3 +6,121 @@ Validation set Accuracy:89.89%
 Test set Accuracy:91.06%
 
 Lambda = 10
+Training set Accuracy:92.474%
+
+Validation set Accuracy:91.91%
+
+Test set Accuracy:92.63%
+
+Lambda = 20
+Training set Accuracy:91.34%
+
+Validation set Accuracy:91.25%
+
+Test set Accuracy:91.85%
+
+Lambda = 50
+Training set Accuracy:90.64%
+
+Validation set Accuracy:90.04%
+
+Test set Accuracy:91.28%
+
+Lambda = 40
+Training set Accuracy:90.446%
+
+Validation set Accuracy:90.27%
+
+Test set Accuracy:91.04%
+
+Lambda = 30
+Training set Accuracy:91.712%
+
+Validation set Accuracy:91.27%
+
+Test set Accuracy:92.14%
+
+Lambda = 10 n_hidden = 100
+Training set Accuracy:90.442%
+
+Validation set Accuracy:89.98%
+
+Test set Accuracy:91.02%
+
+Lambda = 10 n_hidden = 400
+Training set Accuracy:90.256%
+
+Validation set Accuracy:89.63%
+
+Test set Accuracy:90.8%
+
+Lambda = 6 n_hidden = 50
+Training set Accuracy:93.034%
+
+Validation set Accuracy:92.49%
+
+Test set Accuracy:93.16%
+
+Lambda = 6 n_hidden = 250
+Training set Accuracy:90.636%
+
+Validation set Accuracy:89.57%
+
+Test set Accuracy:91.11%
+
+Lambda = 6 n_hidden = 150
+Training set Accuracy:91.794%
+
+Validation set Accuracy:91.17%
+
+Test set Accuracy:91.96%
+
+Lambda = 6 n_hidden = 100
+Training set Accuracy:91.058%
+
+Validation set Accuracy:90.57%
+
+Test set Accuracy:91.57%
+
+Lambda = 8 n_hidden = 50
+Training set Accuracy:91.804%
+
+Validation set Accuracy:91.47%
+
+Test set Accuracy:92.13%
+
+Lambda = 4 n_hidden = 50
+Training set Accuracy:92.49%
+
+Validation set Accuracy:92.08%
+
+Test set Accuracy:92.86%
+
+Lambda = 7 n_hidden = 50
+Training set Accuracy:92.148%
+
+Validation set Accuracy:91.16%
+
+Test set Accuracy:92.39%
+
+Lambda = 9 n_hidden = 50
+Training set Accuracy:92.652%
+
+Validation set Accuracy:92.12%
+
+Test set Accuracy:92.88%
+
+Lambda = 1 n_hidden = 50
+Training set Accuracy:92.58%
+
+Validation set Accuracy:91.92%
+
+Test set Accuracy:92.64%
+
+Lambda = 75 n_hidden = 50
+Training set Accuracy:90.402%
+
+Validation set Accuracy:90.26%
+
+Test set Accuracy:91.0%
+
