@@ -135,6 +135,8 @@ def preprocess():
     
     for i in range(len(columnsToDelete)) :
         train_data = np.delete(train_data,columnsToDelete[i]-i,1)
+        validation_data = np.delete(validation_data,columnsToDelete[i]-i,1)
+        test_data = np.delete(test_data,columnsToDelete[i]-i,1)
 
     print('preprocess done')
 
@@ -185,43 +187,43 @@ def nnObjFunction(params, *args):
     w2 = params[(n_hidden * (n_input + 1)):].reshape((n_class, (n_hidden + 1)))
     obj_val = np.array([])
     obj_sum = 0.0
-    bias = np.ones(50000)
+    no_of_inputs = training_data.shape[0]
+    bias = np.ones(no_of_inputs)
     training_data = np.insert(training_data,0,bias,axis=1)
     sig = np.dot(w1,np.transpose(training_data))
     outputOfHiddenLayer = sigmoid(sig)
     outputOfHiddenLayer = np.insert(outputOfHiddenLayer,0,bias,axis=0)
-    #print("Output of Hidden Layer\n")
-    #print(outputOfHiddenLayer)
-    
+
     sig_for_final_output = np.dot(w2,outputOfHiddenLayer)
     finalOutput = np.transpose(sigmoid(sig_for_final_output))
-    #print("Output of Final Layer\n")
-    #print(finalOutput)
-    training_label_matrix = np.ndarray(shape=(50000,10))
+    
+    training_label_matrix = np.ndarray(shape=(no_of_inputs,n_class))
     
     for i in range(len(training_label)):
         for j in range(n_class):
-            if(j == n_class):
+            if(j == training_label[i]):
                 training_label_matrix[i][j] = 1
             
             else:
                 training_label_matrix[i][j] = 0    
     
     
-    for i in range(50000):
+    #obj_val = np.sum(training_label_matrix*np.log(finalOutput) + (1-training_label_matrix)*np.log(1-finalOutput))
+    
+    #obj_val = (obj_val * -1)/no_of_inputs
+    for i in range(no_of_inputs):
         intermediateSum = 0.0
         for j in range(10):
             if j == training_label[i]:
                     intermediateSum = intermediateSum + np.log(finalOutput[i][j])
                 
             else:
-                if finalOutput[i][j] != 1 :
                     diff = np.log(1-finalOutput[i][j])
                     intermediateSum = intermediateSum + diff
 
         obj_sum = (obj_sum + intermediateSum)
    
-    obj_val = np.append(obj_val,(obj_sum * -1)/50000)
+    obj_val = np.append(obj_val,(obj_sum * -1)/no_of_inputs)
     
     print("Objective Value is : ",obj_val)   
     #print(np.shape(training_label_matrix))
@@ -231,13 +233,8 @@ def nnObjFunction(params, *args):
     #print(np.shape(grad_w2))            
     
     #Calculating Obj Function
-    array_of_ones = np.ndarray(shape=(51,50000))    
-    
-    for i in range(51):
-        for j in range(50000):
-            array_of_ones[i][j] = 1
             
-    subtraction = np.subtract(array_of_ones,outputOfHiddenLayer)
+    subtraction = 1-outputOfHiddenLayer
     #print("Subtraction Shape",np.shape(subtraction))
     sub_prod_zJ = subtraction*outputOfHiddenLayer
     #print("sub_prod_zJ",np.shape(sub_prod_zJ))
@@ -254,11 +251,9 @@ def nnObjFunction(params, *args):
     
     regularization_of_w1 = np.sum(np.square(w1))
     regularization_of_w2 = np.sum(np.square(w2))
-    regularization = (lambdaval*(regularization_of_w1+regularization_of_w2))/(2*n_input)
+    regularization = (lambdaval*(regularization_of_w1+regularization_of_w2))/(2*no_of_inputs)
     obj_val = obj_val + regularization
-    print(regularization_of_w1)
-    print(regularization_of_w2)    
-    
+        
     delJDividedDwj2 = (grad_w2 + lambdaval*w2)/(n_hidden+1)
     delJDividedDwj1 = (grad_w1 + lambdaval*w1)/n_input
     
@@ -286,7 +281,8 @@ def nnPredict(w1, w2, data):
     % Output: 
     % label: a column vector of predicted labels"""
     
-    bias = np.ones(50000)
+    no_of_input = data.shape[0]
+    bias = np.ones(no_of_input)
     data = np.insert(data,0,bias,axis=1)
     sig = np.dot(w1,np.transpose(data))
     outputOfHiddenLayer = sigmoid(sig)
@@ -330,11 +326,14 @@ n_class = 10
 initial_w1 = initializeWeights(n_input, n_hidden)
 initial_w2 = initializeWeights(n_hidden, n_class)
 
+print(np.shape(initial_w2))
+print(np.shape(initial_w1))
+
 # unroll 2 weight matrices into single column vector
 initialWeights = np.concatenate((initial_w1.flatten(), initial_w2.flatten()), 0)
 
 # set the regularization hyper-parameter
-lambdaval = 20
+lambdaval = 0
 
 
 args = (n_input, n_hidden, n_class, train_data, train_label, lambdaval)
