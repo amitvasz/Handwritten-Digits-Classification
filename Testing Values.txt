@@ -1,0 +1,8 @@
+Lambda = 60
+Training set Accuracy:90.542%
+
+Validation set Accuracy:89.89%
+
+Test set Accuracy:91.06%
+
+Lambda = 10
