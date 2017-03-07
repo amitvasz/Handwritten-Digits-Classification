@@ -1,0 +1,54 @@
+Lambda = 60 n_hidden = 200
+Training set Accuracy:66.3127962085%
+(2665, 2)
+
+Validation set Accuracy:64.5028142589%
+(2642, 2)
+
+Test set Accuracy:65.2535957608%
+
+Lambda = 80 n_hidden = 260 iteration = 150
+Training set Accuracy:64.9146919431%
+(2665, 2)
+
+Validation set Accuracy:62.3264540338%
+(2642, 2)
+
+Test set Accuracy:65.3671461014%
+
+Lambda = 100 n_hidden = 256 iteration = 150
+Training set Accuracy:50.0473933649%
+(2665, 2)
+
+Validation set Accuracy:50.0187617261%
+(2642, 2)
+
+Test set Accuracy:50.0%
+
+Lambda = 85 n_hidden = 256 iteration = 150
+Training set Accuracy:66.5545023697%
+(2665, 2)
+
+Validation set Accuracy:65.2532833021%
+(2642, 2)
+
+Test set Accuracy:67.2218016654%
+
+Lambda = 65 n_hidden = 356 iteration = 150
+Training set Accuracy:64.2985781991%
+(2665, 2)
+
+Validation set Accuracy:64.6153846154%
+(2642, 2)
+
+Test set Accuracy:66.3512490537%
+
+Lambda = 79 n_hidden = 256 iteration = 150
+Training set Accuracy:74.7298578199%
+(2665, 2)
+
+Validation set Accuracy:73.5834896811%
+(2642, 2)
+
+Test set Accuracy:75.3217259652%
+

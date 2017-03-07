@@ -3,6 +3,7 @@ from scipy.special import expit
 from scipy.optimize import minimize
 from scipy.io import loadmat
 from math import sqrt
+import pickle
 import math
 
 
@@ -185,7 +186,7 @@ def nnObjFunction(params, *args):
 
     w1 = params[0:n_hidden * (n_input + 1)].reshape((n_hidden, (n_input + 1)))
     w2 = params[(n_hidden * (n_input + 1)):].reshape((n_class, (n_hidden + 1)))
-    obj_val = np.array([])
+    obj_val = 0.0
     obj_sum = 0.0
     no_of_inputs = training_data.shape[0]
     bias = np.ones(no_of_inputs)
@@ -223,7 +224,7 @@ def nnObjFunction(params, *args):
 
         obj_sum = (obj_sum + intermediateSum)
    
-    obj_val = np.append(obj_val,(obj_sum * -1)/no_of_inputs)
+    obj_val = (obj_sum * -1)/no_of_inputs
     
     print("Objective Value is : ",obj_val)   
     #print(np.shape(training_label_matrix))
@@ -254,8 +255,8 @@ def nnObjFunction(params, *args):
     regularization = (lambdaval*(regularization_of_w1+regularization_of_w2))/(2*no_of_inputs)
     obj_val = obj_val + regularization
         
-    delJDividedDwj2 = (grad_w2 + lambdaval*w2)/(n_hidden+1)
-    delJDividedDwj1 = (grad_w1 + lambdaval*w1)/n_input
+    delJDividedDwj2 = (grad_w2 + lambdaval*w2)/(no_of_inputs)
+    delJDividedDwj1 = (grad_w1 + lambdaval*w1)/no_of_inputs
     
     
     obj_grad = np.array([])
@@ -333,7 +334,7 @@ print(np.shape(initial_w1))
 initialWeights = np.concatenate((initial_w1.flatten(), initial_w2.flatten()), 0)
 
 # set the regularization hyper-parameter
-lambdaval = 75
+lambdaval = 6
 
 
 args = (n_input, n_hidden, n_class, train_data, train_label, lambdaval)
@@ -372,3 +373,7 @@ predicted_label = nnPredict(w1, w2, test_data)
 # find the accuracy on Validation Dataset
 
 print('\n Test set Accuracy:' + str(100 * np.mean((predicted_label == test_label).astype(float))) + '%')
+
+#obj = [selected_features, n_hidden, w_1, w_2, lambda]
+
+#pickle.dump(obj, open('params.pickle', 'wb'))

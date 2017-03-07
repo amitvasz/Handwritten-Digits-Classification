@@ -1,0 +1,235 @@
+
+ ---------------------------------------------------------------------------------
+ lamba: 0hidden: 50
+
+ Training set Accuracy:91.29%
+ Validation set Accuracy:91.2%
+ Test set Accuracy:91.8%
+ ---------------------------------------------------------------------------------
+ lamba: 1hidden: 50
+
+ Training set Accuracy:92.248%
+ Validation set Accuracy:91.79%
+ Test set Accuracy:92.51%
+ ---------------------------------------------------------------------------------
+ lamba: 2hidden: 50
+
+ Training set Accuracy:92.104%
+ Validation set Accuracy:91.72%
+ Test set Accuracy:92.25%
+ ---------------------------------------------------------------------------------
+ lamba: 3hidden: 50
+
+ Training set Accuracy:12.846%
+ Validation set Accuracy:12.5%
+ Test set Accuracy:12.78%
+ ---------------------------------------------------------------------------------
+ lamba: 4hidden: 50
+
+ Training set Accuracy:15.054%
+ Validation set Accuracy:14.78%
+ Test set Accuracy:15.29%
+ ---------------------------------------------------------------------------------
+ lamba: 5hidden: 50
+
+ Training set Accuracy:91.788%
+ Validation set Accuracy:91.37%
+ Test set Accuracy:92.1%
+ ---------------------------------------------------------------------------------
+ lamba: 6hidden: 50
+
+ Training set Accuracy:92.104%
+ Validation set Accuracy:91.71%
+ Test set Accuracy:92.24%
+ ---------------------------------------------------------------------------------
+ lamba: 7hidden: 50
+
+ Training set Accuracy:91.512%
+ Validation set Accuracy:90.93%
+ Test set Accuracy:91.94%
+ ---------------------------------------------------------------------------------
+ lamba: 8hidden: 50
+
+ Training set Accuracy:12.036%
+ Validation set Accuracy:11.81%
+ Test set Accuracy:12.16%
+ ---------------------------------------------------------------------------------
+ lamba: 9hidden: 50
+
+ Training set Accuracy:9.852%
+ Validation set Accuracy:10.05%
+ Test set Accuracy:9.8%
+ ---------------------------------------------------------------------------------
+ lamba: 10hidden: 50
+
+ Training set Accuracy:11.134%
+ Validation set Accuracy:10.74%
+ Test set Accuracy:11.29%
+ ---------------------------------------------------------------------------------
+ lamba: 13hidden: 50
+
+ Training set Accuracy:13.016%
+ Validation set Accuracy:12.93%
+ Test set Accuracy:13.63%
+ ---------------------------------------------------------------------------------
+ lamba: 16hidden: 50
+
+ Training set Accuracy:7.288%
+ Validation set Accuracy:7.8%
+ Test set Accuracy:7.47%
+ ---------------------------------------------------------------------------------
+ lamba: 19hidden: 50
+
+ Training set Accuracy:7.668%
+ Validation set Accuracy:7.45%
+ Test set Accuracy:7.75%
+ ---------------------------------------------------------------------------------
+ lamba: 22hidden: 50
+
+ Training set Accuracy:11.114%
+ Validation set Accuracy:10.98%
+ Test set Accuracy:11.04%
+ ---------------------------------------------------------------------------------
+ lamba: 25hidden: 50
+
+ Training set Accuracy:9.702%
+ Validation set Accuracy:10.0%
+ Test set Accuracy:9.74%
+ ---------------------------------------------------------------------------------
+ lamba: 28hidden: 50
+
+ Training set Accuracy:9.172%
+ Validation set Accuracy:9.61%
+ Test set Accuracy:8.53%
+ ---------------------------------------------------------------------------------
+ lamba: 31hidden: 50
+
+ Training set Accuracy:10.652%
+ Validation set Accuracy:10.15%
+ Test set Accuracy:10.35%
+ ---------------------------------------------------------------------------------
+ lamba: 34hidden: 50
+
+ Training set Accuracy:10.064%
+ Validation set Accuracy:9.83%
+ Test set Accuracy:9.91%
+ ---------------------------------------------------------------------------------
+ lamba: 37hidden: 50
+
+ Training set Accuracy:10.332%
+ Validation set Accuracy:10.18%
+ Test set Accuracy:9.91%
+ ---------------------------------------------------------------------------------
+ lamba: 40hidden: 50
+
+ Training set Accuracy:90.446%
+ Validation set Accuracy:90.08%
+ Test set Accuracy:91.0%
+ ---------------------------------------------------------------------------------
+ lamba: 43hidden: 50
+
+ Training set Accuracy:90.742%
+ Validation set Accuracy:90.75%
+ Test set Accuracy:91.21%
+ ---------------------------------------------------------------------------------
+ lamba: 46hidden: 50
+
+ Training set Accuracy:9.54%
+ Validation set Accuracy:9.47%
+ Test set Accuracy:9.96%
+ ---------------------------------------------------------------------------------
+ lamba: 49hidden: 50
+
+ Training set Accuracy:10.156%
+ Validation set Accuracy:10.36%
+ Test set Accuracy:10.21%
+ ---------------------------------------------------------------------------------
+ lamba: 52hidden: 50
+
+ Training set Accuracy:11.234%
+ Validation set Accuracy:10.82%
+ Test set Accuracy:11.05%
+ ---------------------------------------------------------------------------------
+ lamba: 55hidden: 50
+
+ Training set Accuracy:7.564%
+ Validation set Accuracy:7.92%
+ Test set Accuracy:6.96%
+ ---------------------------------------------------------------------------------
+ lamba: 58hidden: 50
+
+ Training set Accuracy:14.152%
+ Validation set Accuracy:13.08%
+ Test set Accuracy:14.02%
+ ---------------------------------------------------------------------------------
+ lamba: 61hidden: 50
+
+ Training set Accuracy:90.574%
+ Validation set Accuracy:89.97%
+ Test set Accuracy:90.93%
+ ---------------------------------------------------------------------------------
+ lamba: 64hidden: 50
+
+ Training set Accuracy:9.338%
+ Validation set Accuracy:9.77%
+ Test set Accuracy:9.38%
+ ---------------------------------------------------------------------------------
+ lamba: 67hidden: 50
+
+ Training set Accuracy:9.818%
+ Validation set Accuracy:10.0%
+ Test set Accuracy:9.58%
+ ---------------------------------------------------------------------------------
+ lamba: 70hidden: 50
+
+ Training set Accuracy:90.254%
+ Validation set Accuracy:90.13%
+ Test set Accuracy:91.04%
+ ---------------------------------------------------------------------------------
+ lamba: 73hidden: 50
+
+ Training set Accuracy:14.712%
+ Validation set Accuracy:13.8%
+ Test set Accuracy:14.28%
+ ---------------------------------------------------------------------------------
+ lamba: 76hidden: 50
+
+ Training set Accuracy:90.274%
+ Validation set Accuracy:89.73%
+ Test set Accuracy:90.76%
+ ---------------------------------------------------------------------------------
+ lamba: 79hidden: 50
+
+ Training set Accuracy:9.686%
+ Validation set Accuracy:10.0%
+ Test set Accuracy:9.82%
+ ---------------------------------------------------------------------------------
+ lamba: 5hidden: 10
+
+ Training set Accuracy:89.528%
+ Validation set Accuracy:89.65%
+ Test set Accuracy:90.13%
+ ---------------------------------------------------------------------------------
+ lamba: 5hidden: 15
+
+ Training set Accuracy:94.258%
+ Validation set Accuracy:93.27%
+ Test set Accuracy:93.74%
+ ---------------------------------------------------------------------------------
+ lamba: 5hidden: 20
+
+ Training set Accuracy:95.0%
+ Validation set Accuracy:93.98%
+ Test set Accuracy:94.5%
+ ---------------------------------------------------------------------------------
+ lamba: 5hidden: 20
+
+ Training set Accuracy:93.678%
+ Validation set Accuracy:92.68%
+ Test set Accuracy:93.33%
+ ---------------------------------------------------------------------------------
+ lamba: 7hidden: 20
+
+ Training set Accuracy:94.062%
+ Validation set Accuracy:93.48%
+ Test set Accuracy:94.04%

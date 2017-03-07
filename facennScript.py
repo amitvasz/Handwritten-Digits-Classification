@@ -37,7 +37,7 @@ def nnObjFunction(params, *args):
 
     w1 = params[0:n_hidden * (n_input + 1)].reshape((n_hidden, (n_input + 1)))
     w2 = params[(n_hidden * (n_input + 1)):].reshape((n_class, (n_hidden + 1)))
-    obj_val = np.array([])
+    obj_val = 0.0
     obj_sum = 0.0
     no_of_inputs = training_data.shape[0]
     bias = np.ones(no_of_inputs)
@@ -78,7 +78,7 @@ def nnObjFunction(params, *args):
 
         obj_sum = (obj_sum + intermediateSum)
    
-    obj_val = np.append(obj_val,(obj_sum * -1)/no_of_inputs)
+    obj_val = (obj_sum * -1)/no_of_inputs
     
     print("Objective Value is : ",obj_val)   
     #print(np.shape(training_label_matrix))
@@ -109,8 +109,8 @@ def nnObjFunction(params, *args):
     regularization = (lambdaval*(regularization_of_w1+regularization_of_w2))/(2*no_of_inputs)
     obj_val = obj_val + regularization
         
-    delJDividedDwj2 = (grad_w2 + lambdaval*w2)/(n_hidden+1)
-    delJDividedDwj1 = (grad_w1 + lambdaval*w1)/n_input
+    delJDividedDwj2 = (grad_w2 + lambdaval*w2)/(no_of_inputs)
+    delJDividedDwj1 = (grad_w1 + lambdaval*w1)/(no_of_inputs)
     
     
     obj_grad = np.array([])
@@ -156,7 +156,7 @@ def preprocess():
     valid_x = features[21100:23765] / 255
     test_x = features[23765:] / 255
 
-    labels = labels.T
+    labels = labels[0]
     train_y = np.zeros(shape=(21100, 2))
     train_l = labels[0:21100]
     valid_y = np.zeros(shape=(2665, 2))
@@ -177,7 +177,7 @@ train_data, train_label, validation_data, validation_label, test_data, test_labe
 # set the number of nodes in input unit (not including bias unit)
 n_input = train_data.shape[1]
 # set the number of nodes in hidden unit (not including bias unit)
-n_hidden = 200
+n_hidden = 256
 # set the number of nodes in output unit
 n_class = 2
 
@@ -187,7 +187,7 @@ initial_w2 = initializeWeights(n_hidden, n_class);
 # unroll 2 weight matrices into single column vector
 initialWeights = np.concatenate((initial_w1.flatten(), initial_w2.flatten()),0)
 # set the regularization hyper-parameter
-lambdaval = 60;
+lambdaval = 60
 args = (n_input, n_hidden, n_class, train_data, train_label, lambdaval)
 
 #Train Neural Network using fmin_cg or minimize from scipy,optimize module. Check documentation for a working example

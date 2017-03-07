@@ -1,4 +1,4 @@
-Lambda = 60
+ Lambda = 60
 Training set Accuracy:90.542%
 
 Validation set Accuracy:89.89%
@@ -123,4 +123,18 @@ Training set Accuracy:90.402%
 Validation set Accuracy:90.26%
 
 Test set Accuracy:91.0%
+
+Lambda = 6 n_hidden = 20 max_iter = 150
+Training set Accuracy:96.56%
+
+Validation set Accuracy:95.42%
+
+Test set Accuracy:96.12%
+
+Lambda = 6 n_hidden = 20 max_iter = 50
+Training set Accuracy:91.63%
+
+Validation set Accuracy:91.03%
+
+Test set Accuracy:91.7%
 
